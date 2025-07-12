@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成绩查询系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f2f5;
+            transition: all 0.5s ease;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+        
+        h1 {
+            color: #4a6baf;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #4a6baf;
+            outline: none;
+        }
+        
+        .btn {
+            background-color: #4a6baf;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #3a5a9f;
+        }
+        
+        .result {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .scrolling-text-container {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .scrolling-text {
+            font-size: 72px;
+            font-weight: bold;
+            color: #ff4757;
+            white-space: nowrap;
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollText 10s linear infinite;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .image-container {
+            width: 80%;
+            max-width: 600px;
+            max-height: 60vh;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .fullscreen-mode {
+            overflow: hidden;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 101;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>成绩查询系统</h1>
+        
+        <div class="input-group">
+            <label for="name">姓名</label>
+            <input type="text" id="name" placeholder="请输入您的姓名">
+        </div>
+        
+        <div class="input-group">
+            <label for="class">班级</label>
+            <input type="text" id="class" placeholder="请输入您的班级">
+        </div>
+        
+        <button class="btn" id="queryBtn">查分</button>
+    </div>
+
+    <div class="result" id="result">
+        <div class="scrolling-text-container">
+            <div class="scrolling-text">少羽牛逼 少羽牛逼 少羽牛逼 少羽牛逼 少羽牛逼 少羽牛逼</div>
+        </div>
+        <div class="image-container">
+            <img src="https://pan.jl8.top/view.php/2153e3f4596ea8449a27672749091eee.jpeg" alt="少羽图片">
+        </div>
+    </div>
+
+    <button class="close-btn" id="closeBtn">×</button>
+
+    <audio id="bgMusic" loop>
+        <source src="https://pan.jl8.top/view.php/5ee5a1989a473be93d3ab02c8b84789b.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const queryBtn = document.getElementById('queryBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const result = document.getElementById('result');
+        const bgMusic = document.getElementById('bgMusic');
+        const container = document.querySelector('.container');
+        
+        queryBtn.addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const className = document.getElementById('class').value;
+            
+            if (name && className) {
+                // 隐藏输入容器
+                container.style.display = 'none';
+                // 显示全屏结果
+                result.style.display = 'flex';
+                // 显示关闭按钮
+                closeBtn.style.display = 'block';
+                // 播放音乐
+                bgMusic.play();
+                // 防止页面滚动
+                document.body.classList.add('fullscreen-mode');
+            } else {
+                alert('请输入姓名和班级！');
+            }
+        });
+        
+        closeBtn.addEventListener('click', function() {
+            // 显示输入容器
+            container.style.display = 'block';
+            // 隐藏全屏结果
+            result.style.display = 'none';
+            // 隐藏关闭按钮
+            closeBtn.style.display = 'none';
+            // 暂停音乐
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            // 恢复页面滚动
+            document.body.classList.remove('fullscreen-mode');
+        });
+    </script>
+</body>
+</html>
